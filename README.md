@@ -1,0 +1,246 @@
+# DBView
+MicroService responsible for Viewing DB Information
+# DBView Rest Api Swagger Definition
+```
+swagger: '2.0'
+info:
+  description: Rest API for viewing DB Information
+  version: 1.0.0
+  title: DB Viewer App API
+
+paths:
+  /dbInfo/addDbInfo:
+    post:
+      summary: adds a new db information
+      consumes: 
+      - application/json
+      parameters:
+      - in: body
+          name: databaseinfo
+          description: The database information to add.
+          schema:
+            type: object
+            required:
+              - name
+              - hostname
+              - port
+              - databaseName
+              - username
+              - password
+            properties:
+              name:
+                type: string
+              hostname:
+                type: string
+              port:
+                type: integer
+              databaseName:
+                type: string
+              username:
+                type: string
+              password:
+                type: string
+    responses:
+      200:
+        description: the request has been processed
+      400:
+        description: problems with the calling parameters
+      500:
+        description: service is not working
+
+  /dbInfo/getAllDbinfo:
+    get:
+      summary: retrieve all db information from database
+      operationId: getAllDbInfo
+      description: retrieve all db information from database
+      parameters:
+      responses:
+        200:
+          description: the request has been processed
+        400:
+          description: problems with the calling parameters
+        500:
+          description: service is not working
+
+  /dbInfo/listTables:
+    get:
+      summary: show all tables of a provided db info identifier
+      operationId: listTables
+      description: show all tables of a provided db info identifier
+      parameters:
+      - in: query
+        name: name
+        description: the name for db information
+        required: true
+        type: string
+      responses:
+        200:
+          description: the request has been processed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  tableName:
+                    type: string
+                    description: tableName
+        400:
+          description: problems with the calling parameters
+        500:
+          description: service is not working
+
+    /dbInfo/listColumns:
+    get:
+      summary: show all columns of a provided db info identifier and table name
+      operationId: listColumns
+      description: show all columns of a provided db info identifier and table name
+      parameters:
+      - in: query
+        name: name
+        description: the name for db information
+        required: true
+        type: string
+      - in: query
+        name: tableName
+        description: the table name
+        required: true
+        type: string
+      responses:
+        200:
+          description: the request has been processed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  fieldName:
+                    type: string
+                    description: fieldName
+                  type:
+                    type: string
+                    description: type
+                  nullable:
+                    type: string
+                    description: nullable
+                  primaryKey:
+                    type: string
+                    description: primaryKey
+                  defaultValue:
+                    type: string
+                    description: defaultValue
+                  extraInfo:
+                    type: string
+                    description: extraInfo
+        400:
+          description: problems with the calling parameters
+        500:
+          description: service is not working
+
+    /dbInfo/previewTable:
+    get:
+      summary: preview a table of a provided db info identifier and table name
+      operationId: previewTable
+      description: preview a table of a provided db info identifier and table name
+      parameters:
+      - in: query
+        name: name
+        description: the name for db information
+        required: true
+        type: string
+      - in: query
+        name: tableName
+        description: the table name
+        required: true
+        type: string
+      - in: query
+        name: browseSize
+        description: the number of rows limit
+        required: true
+        type: integer
+      responses:
+        200:
+          description: the request has been processed
+          content:
+            application/json:
+              schema:
+                type: object
+        400:
+          description: problems with the calling parameters
+        500:
+          description: service is not working
+
+    /dbInfo/getColumnStats:
+    get:
+      summary: get column stats of a table of a provided db info identifier, table name, column name and aggregate operator
+      operationId: getColumnStats
+      description: get column stats of a table of a provided db info identifier, table name, column name and aggregate operator
+      parameters:
+      - in: query
+        name: name
+        description: the name for db information
+        required: true
+        type: string
+      - in: query
+        name: tableName
+        description: the table name
+        required: true
+        type: string
+      - in: query
+        name: columnName
+        description: the column name
+        required: true
+        type: string
+      - in: query
+        name: aggOperator
+        description: the aggregate operator for the column
+        required: true
+        schema:
+            type: string
+            enum: [min, max, avg, count]
+      responses:
+        200:
+          description: the request has been processed
+          content:
+            application/json:
+              schema:
+                type: object
+        400:
+          description: problems with the calling parameters
+        500:
+          description: service is not working
+
+      /dbInfo/getColumnStats:
+    get:
+      summary: get table stats of a table of a provided db info identifier, table name and statType
+      operationId: getColumnStats
+      description: get table stats of a table of a provided db info identifier, table name and statType
+      parameters:
+      - in: query
+        name: name
+        description: the name for db information
+        required: true
+        type: string
+      - in: query
+        name: tableName
+        description: the table name
+        required: true
+        type: string
+      - in: query
+        name: statType
+        description: the stat type for the table that are available in mysql enumerated below
+        required: true
+        schema:
+            type: string
+            enum: [rows, columns, statistics]
+      responses:
+        200:
+          description: the request has been processed
+          content:
+            application/json:
+              schema:
+                type: object
+        400:
+          description: problems with the calling parameters
+        500:
+          description: service is not working
+```
